@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const data = async ()=>{
-    const url = "mongodb://127.0.0.1:27017/ashish"
+    const url = "mongodb://127.0.0.1:27017/registerdatabase"
     await mongoose.connect(url);
-    console.log("Connect");
+    console.log("Connected to " + url);
 }
 data()
 const userSchema = new mongoose.Schema({
@@ -12,12 +12,16 @@ const userSchema = new mongoose.Schema({
         required : true,
         unique : true
     },
-    email : String,
+    email : {
+        type : String,
+        required : true,
+        unique : true
+    },
     password : String,
 })
 
                                                     
-const loginmodel = mongoose.model('admin', userSchema)
+const models = mongoose.model('admin', userSchema)
 
 
-module.exports = loginmodel;
+module.exports = models;
