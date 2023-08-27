@@ -137,11 +137,7 @@ const getregisterdata = async (req,res)=>{
                 to : email,
                 subject : 'Admin Panel',
                 text : 'Forgot Password',
-                html : `<p>Your OTP is ${otp} </p>
-                    <form>
-                    <input type= "text">
-                    </form>
-                        `
+                html : `<p>Your OTP is ${otp} </p>`
             }
             await transporter.sendMail(mailInfo)
         }
