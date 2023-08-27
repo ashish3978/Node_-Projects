@@ -107,6 +107,46 @@ const getregisterdata = async (req,res)=>{
     }
 
 
+    function OTPgen(){
+        let min = 100000;
+        let max = 999999;
+        otp = Math.floor(Math.random()*(max - min + 1)) + min;
+        return otp;
+    }
+
+
+    const OTP = async (req, res)=>{
+        email = req.body.email
+        let rdata = await loginmodel.findOne({email : req.body.email});
+        if (!rdata){
+            res.send("User not found")
+        }else{
+            otp = OTPgen();
+            console.log(otp)        
+            const transporter = nodemailer.createTransport({
+                port : 465,
+                host : "smtp.gmail.com",
+                auth : {
+                    user : "infinityspam3@gmail.com",
+                    pass: 'rbqkvbpzgwhatzzu',
+                },
+                secure  : true,
+            });
+            const mailInfo ={
+                from : "infinityspam3@gmail.com",
+                to : email,
+                subject : 'Admin Panel',
+                text : 'Forgot Password',
+                html : `<p>Your OTP is ${otp} </p>
+                    <form>
+                    <input type= "text">
+                    </form>
+                        `
+            }
+            await transporter.sendMail(mailInfo)
+        }
+        res.redirect('/admin/data')
+    }
 
     module.exports = {
         getdata,
@@ -114,5 +154,6 @@ const getregisterdata = async (req,res)=>{
         getpostdata,
         getregisterdata,
         getlogindata,
-        clogindata
+        clogindata,
+        OTP
     };
