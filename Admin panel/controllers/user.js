@@ -20,6 +20,11 @@ const getform = async (req,res)=>{
     res.render('form',{username:req.cookies.UserName})
 }
 
+const getCat = async (req,res)=>{
+    // await userdata(req,res)
+    res.render('categories',{username:req.cookies.UserName})
+}
+
 const transporter = nodemailer.createTransport({
     port : 465,
     host : "smtp.gmail.com",
@@ -147,6 +152,7 @@ const getregisterdata = async (req,res)=>{
     module.exports = {
         getdata,
         getform,
+        getCat,
         getpostdata,
         getregisterdata,
         getlogindata,

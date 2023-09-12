@@ -4,9 +4,11 @@ const bodyParser = body.urlencoded({extended: false});
 const passport = require('passport');
 const router = express.Router();
 const model = require('../models/model')
-const {getdata,getform, getpostdata, getregisterdata, getlogindata,clogindata, OTP} = require('../controllers/user');
+const {getdata,getform, getCat, getpostdata, getregisterdata, getlogindata,clogindata, OTP} = require('../controllers/user');
 router.get('/admin/data', getdata);
 router.get('/admin/form', getform);
+router.get('/admin/category', getCat);
+
 router.post('/OTP',bodyParser,OTP)
 
 router.post('/admin/save', bodyParser,getpostdata);
