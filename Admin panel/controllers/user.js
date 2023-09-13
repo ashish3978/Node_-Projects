@@ -1,5 +1,5 @@
 const { request } = require('express');
-const model = require('../models/model');
+const model = require('../models/loginmodel');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const saltRounds = 10;
@@ -35,18 +35,18 @@ const transporter = nodemailer.createTransport({
     secure  : true,
 })
 
-const getpostdata = async (req,res)=>{
+// const getpostdata = async (req,res)=>{
 
-    const r= new model({
-        id: 1,
-        email: req.body.email,
-        password: req.body.password
-    })
+//     const r= new model({
+//         id: 1,
+//         email: req.body.email,
+//         password: req.body.password
+//     })
     
-    const r2 = await r.save();
-    console.log("data save successfully"+r2)
-    res.send("data saved successfully")
-}
+//     const r2 = await r.save();
+//     console.log("data save successfully"+r2)
+//     res.send("data saved successfully")
+// }
 
 const loginmodel = require('../models/loginmodel');
 
@@ -54,7 +54,7 @@ const loginmodel = require('../models/loginmodel');
 
 const getregisterdata = async (req,res)=>{
     const {fullname,password,email } = req.body
-    const userdata = await loginmodel.findOne({ email});
+    const userdata = await loginmodel.findOne({email});
     console.log("check user"+userdata);
     if (userdata) {
         return res.send("email already registered")
@@ -81,6 +81,7 @@ const getregisterdata = async (req,res)=>{
     }
     }
 
+    
 
     const getlogindata = async (req,res)=>{
         const userdata = await loginmodel.findOne({email: req.body.email,password:req.body.password});
@@ -153,7 +154,7 @@ const getregisterdata = async (req,res)=>{
         getdata,
         getform,
         getCat,
-        getpostdata,
+        // getpostdata,
         getregisterdata,
         getlogindata,
         clogindata,

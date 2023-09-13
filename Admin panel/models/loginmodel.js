@@ -24,4 +24,4 @@ const userSchema = new mongoose.Schema({
 const models = mongoose.model('admin', userSchema)
 
 
-module.exports = models;
+module.exports = {models, userSchema};
