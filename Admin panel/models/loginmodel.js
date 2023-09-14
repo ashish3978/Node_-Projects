@@ -4,7 +4,8 @@ const data = async ()=>{
     await mongoose.connect(url);
     console.log("Connected to " + url);
 }
-data()
+
+data();
 const userSchema = new mongoose.Schema({
     id : Number,
     fullname : {
@@ -20,8 +21,7 @@ const userSchema = new mongoose.Schema({
     password : String,
 })
 
-                                                    
-const models = mongoose.model('admin', userSchema)
+const loginmodel = mongoose.model('admin', userSchema)
 
 
-module.exports = {models, userSchema};
+module.exports = loginmodel;

@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 const data = async ()=>{
-    const url = "mongodb://127.0.0.1/categories"
+    const url = "mongodb://127.0.0.1:27017/registerdatabase"
     await mongoose.connect(url)
-}
+};
 data();
 const categorySchema = new mongoose.Schema({
     id : Number,
-    category : String,
+    categoryname : String,
 })
 
 
-const adminmodel = new mongoose.model('categorydata', categorySchema)
+const catmodel = new mongoose.model('categorydata', categorySchema)
 
 
-module.exports = {adminmodel,categorySchema};
+module.exports = catmodel;
