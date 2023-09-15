@@ -1,5 +1,5 @@
 <%- include ('./partials/navbar.ejs') %>
-<%- include ('./partials/sidebar.ejs') %>
+<%- include ('./partials/sidebar.ejs',{username:username}) %>
 <%- include ('./partials/header.ejs') %>
 
 
@@ -7,6 +7,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
+        <% if(message2){%>
+          <p class="w-100 rounded p-2 mb-3 btn-primary text-white " role ="alert">
+            <%= message2 %>
+          </p>
+          <%} %>
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1>Add Categories</h1>
@@ -29,13 +34,11 @@
           <div class="col-md-6">
             <!-- general form elements -->
             <div class="card card-primary">
-              <!-- /.card-header -->
-              <!-- form start -->
               <form action="/categories" method="post">
                 <div class="card-body p">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Category Name</label>
-                    <input type="text" name="category" class="form-control" placeholder="Enter category name">
+                    <input type="text" name="catname" class="form-control" placeholder="Enter category name">
                   </div>
                 </div>
                 <div class="card-footer">
@@ -43,9 +46,48 @@
                 </div>
               </form>
             </div>
-            
-          <!--/.col (right) -->
-        </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Bordered Table</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Category</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1.</td>
+                      <td>Update software</td>
+                      <td>
+                        <div class="">
+                          
+                        </div>
+                      </td>
+                    
+                    </tr>
+                   
+                    
+                  </tbody>
+                  <% if(getallcat){ %>
+                  <% getallcat.forEach((item)=>{ %>
+                    <tr>
+                      <td><%= item.id %></td>
+                      <td><%= item.catname %></td>
+                    </tr>
+                  <% }) %>
+                  <% } %>
+                </table>
+              </div>
+            </div>
+          </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>

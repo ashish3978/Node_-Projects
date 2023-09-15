@@ -54,30 +54,6 @@ app.get('/register', (req, res) => {
   res.render('register');
 })
 
-// const mongoose = require('mongoose');
-
-//     const maindata = async ()=>{
-//         const url = 'mongodb://127.0.0.1:27017/admin';
-//         const connect = await mongoose.connect(url);
-
-//         const empSchema = new mongoose.Schema({
-//             id : Number,
-//             name: String,
-//             age : Number,
-//             salary : Number,
-//         })
-//         const empmodel = new mongoose.model('employee', empSchema);
-
-//         const data = new empmodel({
-//             id : 1,
-//             name : 'test',
-//             age : '25',
-//             salary : '30000',
-//         })
-//         let res = await data.save();
-//         console.log("Successfully saved data")
-//     }
-//     maindata();
 
 
 app.listen(9000, "127.0.0.1", () => {

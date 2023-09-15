@@ -1,39 +1,46 @@
 const express = require('express');
-const catmodel = require('../models/loginmodel');
-const { model } = require('mongoose');
+const model = require('../models/catModel');
 
 const app = express();
 app.use(express.json());
 
-const getcategorydata = async (req, res) => {
-    const a = new catmodel({})
-    const Getallcategories = await a.find({});
-    console.log(Getallcategories)
+const getcategorydata = async (req,res)=>{
+    const getallcat = await model.find();
+    console.log(getallcat);
     
-      
+    res.render('categories',{
+                    username:req.cookies.UserName,
+                    getallcat: getallcat,
+                    message2: '',
+                    });
+    }
+
+    const savecat = async (req,res)=>{
+    const id = 1;
+    const getall = await model.find();
+    console.log(getall)
+    const len = getall.length+1;
+    const catname = req.body.catname;
+    const checkName = await model.findOne({catname:catname})
+    if(checkName){
+        res.send("Category Already Exists!");
+    }
+    const result = {
+        id: len,
+        catname: catname
+    }
+    const savedata = new model(result);
+    await savedata.save();
+    req.flash('success',   'Category Saved');
     res.render('categories',{
         username: req.cookies.UserName,
-        getallCate: getallCate
-        });
-
+        // getallcat: getallcat,
+        message2 : req.flash('success')
+    });
 }
  
-// const catsave  = async (req,res)=>{
-//     const id = 1;
-//     const category = req.body.category;
-//     const cname = await model.findOne({category:category})
-//     if(cname){
-//         res.send("category already exist");
-//     }
-// }
-// const result = {
-//     id : id,
-//     category : category
-// }
+module.exports = {getcategorydata, savecat};
 
-// const datasave = new catmodel(result)
-// await datasave.save();
-// const getallCate = await model.find();
-// res.render('category',{username})
 
-module.exports = getcategorydata;
+
+
