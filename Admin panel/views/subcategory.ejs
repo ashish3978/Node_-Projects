@@ -1,0 +1,102 @@
+<%- include ('./partials/navbar.ejs',{username:username}) %>
+<%- include ('./partials/sidebar.ejs',{username:username}) %>
+<%- include ('./partials/header.ejs') %>
+
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Add Sub Categories</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Add Sub Category</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <form action='<%= (editsubcat)?'/admin/updatesubcat/'+editsubcat._id:'/savesubcat'%>' method="post">
+                <div class="card-body">
+                  <div class="form-group">
+                    <select name="cat_id" class="form-control" >
+                      <option value="">Select Category</option>
+                      <% catdata.forEach((i) => { 
+                          var selected = ( editsubcat && i._id.toString() == editsubcat.cat_id.toString()) ? 'selected' : '';
+                      %>
+                          <option value="<%= i._id %>" <%= selected %>><%= i.catname %></option>
+                      <% }) %>
+                  </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Sub Category Name</label>
+                    <input type="text" name="name" value="<%= (editsubcat)? editsubcat.name: '' %>" class="form-control" placeholder="Enter Sub category">
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Sub Categories Table</h3>
+              </div>
+              <div class="form-group m-3">
+                  <select id="sub_cat_id" class="form-control" name="sub_cat_id">
+                                <option value="">Select Category</option>
+                                <% catdata.forEach((i) => { %>
+                                    <option value="<%= i._id %>"><%= i.catname %></option>
+                                <% }) %>
+                  </select>
+              </div>
+              <div class="card-body pt-0">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Category Name</th>
+                      <th>Sub Category Name</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <% if(Allsubcat) { %>
+                    <% Allsubcat.forEach((item)=>{ %>
+                        <tr>
+                            <td><%= item._id %></td>
+                            <td><%= item.cat_id.catname %></td>
+                            <td><%= item.name %></td>
+                            <td class="d-flex">
+                              <button class="btn btn-outline-success"><a href="/admin/editsubcategory/<%= item._id%>">Edit</a></button>
+                              <button class="btn btn-outline-danger"><a href="/admin/delsubcategory/<%= item._id%>">Delete</a></button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+                </table>
+              </div>
+            </div>
+          </div>
+        <!-- /.row -->
+      </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <%- include ('./partials/footer.ejs') %>
+  <script src="./allcat.js"></script>

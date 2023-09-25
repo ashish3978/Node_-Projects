@@ -20,8 +20,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(session({
   secret: 'secret-key',
-  resave: false,
   saveUninitialized: false,
+  resave: false,  
 }));
 
 
@@ -47,16 +47,16 @@ app.get('/logout', (req, res) => {
 
 })
 app.get('/', (req, res) => {
-  res.render('login');
+  res.render('login',{message:''});
 })
 
 app.get('/register', (req, res) => {
-  res.render('register');
+  res.render('register',{message:''});
 })
 
 
 
 app.listen(9000, "127.0.0.1", () => {
-    console.log("Server running on port 8000");
+    console.log("Server running on port 9000");
   });
   

@@ -1,4 +1,4 @@
-<%- include ('./partials/navbar.ejs') %>
+<%- include ('./partials/navbar.ejs',{username:username}) %>
 <%- include ('./partials/sidebar.ejs',{username:username}) %>
 <%- include ('./partials/header.ejs') %>
 
@@ -7,11 +7,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
-        <% if(message2){%>
-          <p class="w-100 rounded p-2 mb-3 btn-primary text-white " role ="alert">
-            <%= message2 %>
-          </p>
-          <%} %>
+        
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1>Add Categories</h1>
@@ -34,11 +30,11 @@
           <div class="col-md-6">
             <!-- general form elements -->
             <div class="card card-primary">
-              <form action="/categories" method="post">
+              <form action="<%= (editcate)?'/admin/updatecategory/'+editcate._id:'/categories'%>" method="post">
                 <div class="card-body p">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Category Name</label>
-                    <input type="text" name="catname" class="form-control" placeholder="Enter category name">
+                    <input type="text" name="catname" class="form-control" value="<%= (editcate)? editcate.catname: '' %>" placeholder="Enter category name">
                   </div>
                 </div>
                 <div class="card-footer">
@@ -64,26 +60,23 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>1.</td>
-                      <td>Update software</td>
-                      <td>
-                        <div class="">
-                          
-                        </div>
-                      </td>
-                    
+                      
                     </tr>
                    
                     
                   </tbody>
-                  <% if(getallcat){ %>
-                  <% getallcat.forEach((item)=>{ %>
-                    <tr>
-                      <td><%= item.id %></td>
-                      <td><%= item.catname %></td>
-                    </tr>
-                  <% }) %>
-                  <% } %>
+                  <% if(getAllCat) { %>
+                    <% getAllCat.forEach((item,id)=>{ %>
+                        <tr>
+                            <td><%= id+1 %></td>
+                            <td><%= item.catname %></td>
+                            <td>
+                              <button class="btn btn-outline-success"><a href="/admin/editcate/<%= item._id%>">Edit</a></button>
+                              <button class="btn btn-outline-danger"><a href="/admin/deletecate/<%= item._id%>">Delete</a></button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
                 </table>
               </div>
             </div>
