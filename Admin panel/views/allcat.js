@@ -1,25 +1,32 @@
+console.log("DOMContentLoaded event fired");
+
 document.addEventListener('DOMContentLoaded', () => {
-    const dropdown = document.getElementById('sub_cat_id');
-    const resultDiv = document.getElementById('result');
+    const dropdown = document.getElementById('subcat_id');
+    const data = document.getElementById('data');
   
     dropdown.addEventListener('change', () => {
-      
       const selectedValue = dropdown.value;
-      
-      // Send an AJAX request to the Express server
-      fetch(`/getData?selectedValue=${selectedValue}`)
+      console.log(`Selected value: ${selectedValue}`); //For Debugging
+
+    
+      fetch(`/allcatdata?selectedValue=${selectedValue}`)
         .then((response) => response.json())
-        .then((data) => {
+        .then((tdata) => {
+          console.log("Fetched data:", tdata); // Debug
           let tr = '';
-          data.forEach((e)=>{
-            tr += `<tr><td>${e._id}</td><td>${e.cat_id.catname}</td><td>${e.name}</td><td><a href="/admin/editsubcategory/${e._id}">Edit</a><a href="/admin/delsubcategory/${e._id}">Delete</a></td></tr>`;
+          tdata.forEach((a)=>{
+            tr += `<tr><td>${a._id}</td>
+                      <td>${a.cat_id.catname}</td>
+                      <td>${a.name}</td><td><a href="/admin/editsubcategory/${a._id}">Edit</a><a href="/admin/delsubcategory/${a._id}">Delete</a></td>
+                    </tr>`;
           })
-          resultDiv.innerHTML = tr;
+          data.innerHTML = tr;
         })
         .catch((error) => {
           console.error('Error:', error);
         });
-      
     });
   });
-  
+  console.log("Hello, this script is running!");
+
+

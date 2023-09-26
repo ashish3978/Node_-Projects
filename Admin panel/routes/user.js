@@ -8,10 +8,10 @@ const {SaveSubCat, Allsubcat,delsubcat, editsubcat, updatesubcat, allcatdata} = 
 router.get('/admin/data', getdata);
 router.get('/admin/form', getform);
 router.get('/admin/category', getcategorydata);
+router.get('/admin/subcategory', Allsubcat);
 router.post('/admin/updatecategory/:id',bodyParser,updateCate);
 router.get('/admin/deletecate/:id',deleteCategory);
 router.get('/admin/editcate/:id',editCategory);
-router.get('/admin/subcategory', Allsubcat);
 router.get('/admin/delsubcategory/:id', delsubcat);
 router.get('/admin/editsubcategory/:id', editsubcat);
 router.get('/allcatdata',allcatdata);

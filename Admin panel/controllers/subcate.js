@@ -39,7 +39,7 @@ const SaveSubCat = async(req,res)=>{
 
     const allcatdata = async(req,res) => {
         let cat_id = req.query.selectedValue;
-        let subData;
+        let subdata;
         if(cat_id != '') {
             subdata =  await submodel.find({cat_id:cat_id}).populate("cat_id");
         }
@@ -49,10 +49,14 @@ const SaveSubCat = async(req,res)=>{
     
             res.json(subdata);
     }
+
+
+
 const Allsubcat = async(req,res)=>{
     let catdata = await model.find();
     let subdata = await submodel.find().populate("cat_id");
     console.log(subdata);
+
     res.render('subcategory',{
         username: req.cookies.UserName,
         Allsubcat: subdata,
@@ -66,22 +70,30 @@ const delsubcat =  async(req,res)=>{
     const id = req.params.id;
     console.log(req.params.id);
     const result = await submodel.findByIdAndRemove({_id:id})
-    res.redirect('/admin/subcategory')
+    res.redirect('/admin/subcategory');
 }
-const editsubcat = async(req,res)=>{
-    const id = req.params.id;
-    console.log(id)
-    let catdata = await model.find();
-    let subdata =  await submodel.find().populate("cat_id");
-    result = await submodel.findOne({_id:id})
-    res.render('subcategory',{
-        username: req.cookies.UserName,
-        Allsubcat: subdata,
-        message2:'',
-        editsubcat:result,
-        catdata: catdata
-});
-}
+const editsubcat = async (req, res) => {
+    try {
+        const id = req.params.id;
+        console.log(id);
+
+        let catdata = await model.find();
+        let subdata = await submodel.find().populate("cat_id");
+        let result = await submodel.findOne({ _id: id });
+
+        res.render('subcategory', {
+            username: req.cookies.UserName,
+            Allsubcat: subdata,
+            message2: '',
+            editsubcat: result,
+            catdata: catdata
+        });
+    } catch (error) {
+        // Handle the error, e.g., log it or send an error response
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+};
 
 const updatesubcat = async(req,res)=>{
     let getAllCat = await submodel.find();
@@ -93,8 +105,16 @@ const updatesubcat = async(req,res)=>{
             name:name,
             cat_id:id,
         }
+        
     })
+    console.log(result)
     console.log("updated");
     res.redirect('/admin/subcategory');
 }
-module.exports = {SaveSubCat, Allsubcat, delsubcat ,editsubcat, updatesubcat, allcatdata}
+module.exports = {
+                SaveSubCat, 
+                Allsubcat, 
+                delsubcat,
+                editsubcat, 
+                updatesubcat, 
+                allcatdata}
