@@ -31,9 +31,13 @@ app.use(session({
 app.use(flash());
 
 app.use(routes);
-// app.get('/index', (req, res) => {
-//   res.render('login',{ message: '' })
-// })
+app.get('/index', (req, res) => {
+  res.render('index',{ 
+    username: req.cookies.UserName,
+    message: '' ,
+    categoryCount: res.locals.categoryCount,
+  })
+})
 
 app.get('/logout', (req, res) => {
   res.clearCookie('UserName')
@@ -42,7 +46,7 @@ app.get('/logout', (req, res) => {
 })
 app.get('/', (req, res) => {
   res.render('login',{message:''});
-})
+}) 
 
 app.get('/register', (req, res) => {
   res.render('register',{message_2:''});

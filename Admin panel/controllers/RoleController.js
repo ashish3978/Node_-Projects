@@ -1,7 +1,9 @@
 const express =require('express');
 const model = require('../models/catModel')
 const submodel = require('../models/SubCatModel');
-const RoleModel= require('../models/RoleModel');        
+const RoleModel= require('../models/RoleModel');  
+const checkManagerRole = require('../middleware/checkManagerRole');
+
 
 const app = express();
 app.use(express.json());
@@ -43,13 +45,17 @@ const SaveRole = async(req,res)=>{
 const AllRole = async(req,res)=>{
     let catdata = await model.find();
     let roledata = await RoleModel.find();
-    console.log(roledata);
+    const userRole = req.cookies.UserRole; 
 
+    if(userRole && userRole === 'Manager','Employee'){
+        req.flash('danger', 'Managers are not allowed to access this functionality.');
+        return res.render('404', { message2: req.flash('danger') }); 
+    }
     res.render('Role',{
         username: req.cookies.UserName,
         AllRole: roledata,
         message2:'',
-        EditRole:'',
+        EditRole:'', 
         catdata: catdata
     })
 }
@@ -76,7 +82,6 @@ const AllRole = async(req,res)=>{
     res.status(500).json({ error: 'An error occurred' });
   }
 };
-
 
 
 const DeleteRole =  async(req,res)=>{
@@ -129,4 +134,6 @@ module.exports = {
                 EditRole, 
                 UpdateRole, 
                 AllRoleData,
-                Getsearchdata}
+                Getsearchdata,
+                checkManagerRole
+            }

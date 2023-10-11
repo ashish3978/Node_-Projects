@@ -21,7 +21,7 @@ const AllPro = async(req,res)=>{
     let proddata = await Product_model.find().populate("cat_id").populate("SubCat_id");
     res.render('products',{
         username: req.cookies.UserName,
-        catdata: catdata,
+        catdata: catdata, 
         message2:'',
         AllPro: proddata, 
         subdata: subdata,
@@ -50,17 +50,15 @@ const SaveProducts = async(req,res)=>{
     //     fs.writeFileSync(path, base64Data,  {encoding: 'base64'});
     //     const base64ImageData = 'data:image/png;base64,iVBORw0KG...'; // Replace with your actual base64 image data
     //     res.render('products', { item1: { Images: base64ImageData } });
-        
+        console.log(req.file.filename);
     const result = { 
         cat_id:req.body.cat_id,
         SubCat_id:req.body.sub_cat_id,
         Product_name:req.body.Product_name,
         Product_price:req.body.Product_price,
-        Images: path
+        Images: req.file.filename
     }
-    if(req.file){
-        Products.Images = req.file.path
-    }
+
     const savedata = new Product_model(result);
     await savedata.save();
     res.redirect('/admin/products')
@@ -113,7 +111,7 @@ const updateProduct = async(req,res)=>{
             Product_name:Product_name,
             Product_price: Product_price,
             cat_id:id,
-            sub_cat_id:sub_id
+            // sub_cat_id:sub_id
         }
         
     })

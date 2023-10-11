@@ -2,16 +2,27 @@ const express = require('express');
 const body = require('body-parser');
 const bodyParser = body.urlencoded({extended: false});
 const router = express.Router();
+const multer = require('multer');
 
+let Storage = multer.diskStorage({
+    destination: 'images/',
+    filename: (req, file, cb)=>{
+        cb(null, file.originalname)
+    }
+});
 
-
+let upload = multer({
+    Storage: Storage
+})
 const {getdata, getform, getpostdata, getregisterdata, clogindata ,OTP} = require('../controllers/user');
 const {getcategorydata, savecat, editCategory, deleteCategory, updateCate} = require('../controllers/categories');
 const {SaveSubCat, Allsubcat,delsubcat, editsubcat, updatesubcat, allcatdata, Getsearchdata} = require('../controllers/subcate');
 const {AllPro, AllSubData, SaveProducts, deleteProduct, editProduct, updateProduct} = require('../controllers/Products');
-const {SaveRole, AllRole, AllRoleData, EditRole, UpdateRole, DeleteRole} = require('../controllers/RoleController');
+const {SaveRole, AllRole, AllRoleData ,EditRole, UpdateRole, DeleteRole} = require('../controllers/RoleController');
 const verifytoken = require('../models/JWT');
-const upload = require('../middleware/upload');
+// const upload = require('../middleware/upload');
+const checkManagerRole = require('../middleware/checkManagerRole');
+
 
 // router.get('/admin/form', getform);
 router.get('/admin/data', getdata); 
@@ -20,7 +31,8 @@ router.get('/admin/subcategory', Allsubcat);
 router.get('/admin/products',AllPro);
 router.get('/Role',AllRole);
 
-router.get('/AllRoleData',AllRoleData);
+
+router.get('/AllRoleData', checkManagerRole,AllRoleData);
 router.get('/allcatdata',allcatdata);
 router.get('/allsubdata', AllSubData);
 router.get('/GetSearchData',Getsearchdata);
@@ -45,10 +57,10 @@ router.post('/admin/save', bodyParser,getpostdata);
 router.post('/', bodyParser,clogindata);
 router.post('/OTP',bodyParser,OTP);
 router.post('/categories',bodyParser, savecat);
-router.post('/SaveRole',bodyParser, SaveRole);
+router.post('/SaveRole',checkManagerRole ,bodyParser, SaveRole);
 
 router.post('/savesubcat',bodyParser,SaveSubCat);
-router.post('/ProductSave',upload.single('Images'),bodyParser,SaveProducts);
+router.post('/ProductSave',upload.array('image'),bodyParser,SaveProducts);
  
 
 module.exports = router; 

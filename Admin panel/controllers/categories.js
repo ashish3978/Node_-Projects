@@ -23,7 +23,18 @@ const savecat = async (req,res)=>{
     const len = getAllCat.length+1;
     const catname = req.body.catname;
     const cName = await model.findOne({catname:catname})
+    
     if(cName){
+        try {
+            const categoryCount = await getAllCat.countDocuments();
+            console.log(categoryCount)
+            res.locals.categoryCount = categoryCount; // Make it accessible in templates
+            // const employeeCount = await Employee.countDocuments();
+            res.render('categories', { categoryCount });
+          } catch (error) {
+            res.locals.categoryCount = 0; // Handle the error or set a default value
+            res.status(500).json({ error: 'Internal server error' });
+          }
         req.flash('success', 'Category already exists');
         res.render('categories',{
             username: req.cookies.UserName,
@@ -38,14 +49,13 @@ const savecat = async (req,res)=>{
         }
         const savedata = new model(result);
         await savedata.save();
-        // getAllCat = await model.find();
         req.flash('success',   'Category Saved');
         res.render('categories',{
             username: req.cookies.UserName,
             getAllCat: getAllCat,
             message : req.flash('success'),
             editcate: ''
-        });
+        });  
     }
 }
 
