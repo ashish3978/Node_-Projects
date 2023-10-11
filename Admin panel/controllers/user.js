@@ -1,21 +1,31 @@
     const express = require('express');
     const loginmodel = require('../models/loginmodel');
+    const RoleModel = require('../models/RoleModel'); 
     const bcrypt = require('bcrypt');
     const nodemailer = require('nodemailer');
     const saltRounds = 10;
     const app = express();
     app.use(express.json());
 
+    const jwt = require('jsonwebtoken');
+    const localStorage = require('localStorage');
+    const secretKey = 'Hello'; 
 
     const userdata = async(req,res) => {
         if(req.cookies && req.cookies.UserName != ""){
             return res.redirect('/')
-        }
+        } 
     }
 
     const getdata = async (req,res)=>{ 
-    res.render("index", { fullname: req.cookies.UserName });
-    };
+        const roledata = await RoleModel.find();
+        console.log(roledata)
+            res.render("register", { 
+                fullname: req.cookies.UserName,
+                roledata: roledata,
+                message_2: ''
+            });
+    }; 
 
     const getform = async (req,res)=>{
         await userdata(req,res)
@@ -27,7 +37,7 @@
     }
     
     const login = (req, res) => {
-        res.render('/', { message1: '' });
+        res.render('/', { message: '' });
     }
 
     const transporter = nodemailer.createTransport({
@@ -41,35 +51,40 @@
     })
 
     const getpostdata = async (req,res)=>{
-
         const r= new model({
             id: 1,
             email: req.body.email,
             password: req.body.password
         })
-        
         const r2 = await r.save();
         console.log("data save successfully"+r2)
         res.send("data saved successfully")
     }
 
-    // const loginmodel = require('../models/loginmodel');
-
     const getregisterdata = async (req,res)=>{
         const {fullname,password,email} = req.body
-        const userdata = await loginmodel.findOne({email});
-        console.log("check user"+userdata);
-        if (userdata) {
-            // return res.send("email already registered")
+        const roledata = await RoleModel.find(); 
+        // const rdata = await loginmodel.find().populate("role_id")
+        // console.log(rdata.role_id)
+        const userdata = await loginmodel.findOne({email}).populate('role_id');
+        console.log(userdata);
+        console.log("check user"+userdata); 
+        if(userdata){
+            
             req.flash('danger', 'email already registered');
-            res.render('register', { message: req.flash('danger') });
+            res.render('register', {
+                message_2: req.flash('danger'),
+                roledata: roledata,
+            }); 
         }else{
             const crypted = await bcrypt.hash(password, saltRounds)
             const r3= new loginmodel({
                 id: 1,
                 fullname: fullname,
                 email: email,
-                password: crypted
+                password: crypted,
+                token: '',
+                role_id: role_id
             })
             const mailInfo ={
                 from : "infinityspam3@gmail.com",
@@ -79,11 +94,13 @@
                 html : '<p>You are successfully registered</p>'
             }
             await transporter.sendMail(mailInfo)
-            const r4 = await r3.save();
-            console.log("data save successfully"+r4)
-            // res.send("you are now registered");
+            await r3.save();
+
+            let token = jwt.sign({r3:r3}, secretKey)
+            let _id = r3._id;
+            const result = await loginmodel.findByIdAndUpdate({_id},{$set: {token:token}})
             res.redirect("/")
-        }
+            }
         }
 
         
@@ -102,21 +119,25 @@
         //         return res.render('login', { message1: req.flash('danger') });
         //     }
         // }
-
+  
         const clogindata = async (req,res)=>{
             const rdata = await loginmodel.findOne({email: req.body.email});
             console.log("check user "+rdata);
-            if (!rdata){
-                return res.send("User not found");
-            }else{
-                const isPasswordValid = await bcrypt.compare(req.body.password, rdata.password);
-                if(!isPasswordValid){
-                    req.flash('danger', 'Email or password wrong!');
-                    return res.render('login', { message1: req.flash('danger') });
-                }else{
-                    console.log('fednjn')
-                    return res.redirect('/admin/data') ;
+            if (req.body.email != '' && req.body.password != '') {
+                if (rdata){
+                    const isPasswordValid = await bcrypt.compare(req.body.password, rdata.password);
+                    if(!isPasswordValid){
+                        req.flash('danger', 'Email or password wrong!');
+                        return res.render('login', { message: req.flash('danger') });
+                    }else{
+                        res.cookie("UserName", rdata.name);
+                        localStorage.setItem('usertoken', JSON.stringify(rdata.token));
+                        res.render('index', { message: '', username: rdata.name });
+                    }
                 }
+            } else {
+                req.flash('danger', 'Please Enter All the Fields!');
+                res.render('login', { message: req.flash('danger') });
             }
         }
 

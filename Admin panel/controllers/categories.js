@@ -1,5 +1,6 @@
 const express = require('express');
 const model = require('../models/catModel');
+const submodel = require('../models/SubCatModel');
 
 const app = express();
 app.use(express.json());
@@ -87,22 +88,22 @@ const updateCate = async (req,res)=>{
 }
 
 const deleteCategory = async (req,res)=>{
-    try{    const id = req.params.id;
+    const id = req.params.id;
     console.log("ID to delete:", id);
-    const d = await model.findByIdAndRemove({_id: id});
-    console.log("Deleted category:", d);
-    if(d){
-        res.redirect('/admin/category')
+    const sub_cat = await submodel.find({cat_id: id});
+    console.log("Deleted category:", sub_cat);
+    if(sub_cat.length > 0){
+        res.send("Category has subcategory so first delete it");
     } else {
-        res.status(404).send("Category not found");
-    }
-}catch(error){
-    console.error("Error deleting category:", error);
-        res.status(500).send("Internal Server Error");
+        const data = await models.findByIdAndRemove({_id: id});
+        if(data){
+            res.redirect('/admin/category')
+        }
+        }
 }
 
 
-}
+
 module.exports = {  
                     getcategorydata, 
                     savecat, 

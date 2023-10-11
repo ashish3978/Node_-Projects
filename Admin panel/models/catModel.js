@@ -7,7 +7,7 @@ const data = async ()=>{
 };
 data();
 const categorySchema = new mongoose.Schema({
-    id : Number,
+    id : Number, 
     catname : {
         type: String,
         required: true,

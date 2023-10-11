@@ -40,7 +40,7 @@
                       %>
                           <option value="<%= i._id %>" <%= selected %>><%= i.catname %></option>
                       <% }) %>
-                  </select>
+                    </select>
                   </div>
                   <div class="form-group">
                     <label for="exampleInputEmail1">Sub Category Name</label>
@@ -58,13 +58,20 @@
               <div class="card-header">
                 <h3 class="card-title">Sub Categories Table</h3>
               </div>
-              <div class="form-group m-3">
+              <div class="row form-group m-3">
+                <div class="col-md-6">
                   <select id="subcat_id" name="subcat_id" class="form-control" >
                                 <option value="">Select Category</option>
                                 <% catdata.forEach((i) => { %>
                                     <option value="<%= i._id %>"><%= i.catname %></option>
                                 <% }) %>
                   </select>
+                </div>
+                <div class="col-md-6">
+                  <form>
+                    <input type="search" id="SearchCat" name="SearchCat" class="form-control" placeholder="Search Here...">  
+                  </form>  
+                </div>
               </div>
                 <table class="table table-bordered">
                   <thead>
@@ -82,9 +89,9 @@
                             <td><%= item._id %></td>
                             <td><%= item.cat_id.catname %></td>
                             <td><%= item.name %></td>
-                            <td class="d-flex">
-                              <button class="btn btn-outline-success"><a href="/admin/editsubcategory/<%= item._id%>">Edit</a></button>
-                              <button class="btn btn-outline-danger"><a href="/admin/delsubcategory/<%= item._id%>">Delete</a></button>
+                            <td class="d-flex p-0">
+                              <button class="btn btn-outline-success m-2"><a href="/admin/editsubcategory/<%= item._id%>">Edit</a></button>
+                              <button class="btn btn-outline-danger m-2"><a href="/admin/delsubcategory/<%= item._id%>">Delete</a></button>
                             </td>
                         </tr>
                     <% }) %>
@@ -93,7 +100,6 @@
                 </table>
             </div>
           </div>
-        <!-- /.row -->
       </div>
     </section>
     <!-- /.content -->

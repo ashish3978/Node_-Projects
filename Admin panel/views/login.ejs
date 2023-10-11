@@ -119,8 +119,12 @@ body {
 
 <h4 class="text-center mt-4">Login</h4>
 
-        
-    <form action="/" method="post" class="p-3 mt-4">
+<% if(message){ %>
+    <p class="rounded p-2 btn-primary text-white bg-danger mb-0" role="alert">
+        <%= message %>
+    </p>
+<% } %>
+    <form action="/" method="post" class="p-3 mt-1">
         <div class="form-field d-flex align-items-center">
             <span class="far fa-user"></span>
             <input type="email" name="email" placeholder="Email">
@@ -133,7 +137,7 @@ body {
     </form>
     <div class="text-center fs-6">
             <a href="/passforgot" class="fs-6">Forgot Password ?</a><br>
-        <a>If you have not register</a> <a href="/register" class="fs-6">Register</a>
+        <a>If you have not register</a> <a href="/admin/data" class="fs-6">Register</a>
 
     </div>
 </div>

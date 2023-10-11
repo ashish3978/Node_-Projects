@@ -1,0 +1,138 @@
+<%- include ('./partials/navbar.ejs' )%>
+<%- include ('./partials/sidebar.ejs') %>
+<%- include ('./partials/header.ejs') %>
+
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Add Products</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Add Products</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <!-- left column -->
+          <div class="col-md-8 ">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <form action="<%= (editProduct)?'/admin/updateProduct/'+editProduct._id:'/ProductSave'%>" method="post" enctype="multipart/form-data">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Select Category</label>
+                    <select id="cat_id" name="cat_id" class="form-control" >
+                        <option value="">---Select Category---</option>
+                        <% catdata.forEach((i) => { 
+                              var selected = ( editProduct && i._id.toString() == editProduct.cat_id.toString()) ? 'selected' : '';
+                        %>
+                            <option value="<%= i._id %>"<%= selected %> ><%= i.catname %></option>
+                        <% }) %>
+                    </select>
+                  </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Select Sub Category</label>
+                    <select id="sub_cat_id" name="sub_cat_id" class="form-control" >
+                      <option value="">---Select Subcategory---</option>
+                      <% subdata.forEach((i) => { 
+                              var selected = ( editProduct && i._id.toString() == editProduct.SubCat_id.toString()) ? 'selected' : '';
+                        %>
+                            <option value="<%= i._id %>"<%= selected %> ><%= i.name %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Product Name</label>
+                    <input type="text" name="Product_name" value="<%= (editProduct)? editProduct.Product_name: '' %>"  class="form-control" placeholder="Enter Product Name">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Product Price</label>
+                    <input type="number" name="Product_price" value="<%= (editProduct)? editProduct.Product_price: '' %>"  class="form-control" placeholder="Enter Product Price">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Product Image</label>
+                    <input type="file" name="image"  class="form-control">
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Sub Categories Table</h3>
+                </div>
+                <div class="row form-group m-3">
+                      <div class="col-md-6">
+                        <select id="subcat_id" name="subcat_id" class="form-control" >
+                                      <option value="">Select Category</option>
+                                      <% catdata.forEach((i) => { %>
+                                          <option value="<%= i._id %>"><%= i.catname %></option>
+                                      <% }) %>
+                        </select>
+                      </div>
+                    <div class="col-md-6">
+                        <form>
+                            <input type="search" id="SearchCat" name="SearchCat" class="form-control" placeholder="Search Here...">  
+                        </form>  
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>Category Name</th>
+                            <th>Sub Category Name</th>
+                            <th>Product Name</th>
+                            <th>Product Price</th>
+                            <th>Product Image</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data">
+                  <% if(AllPro) { %>
+                    <% AllPro.forEach((item1)=>{ %>
+                      <% console.log(item1); %>
+                      
+                        <tr>
+                            <td><%= item1._id %></td>
+                            <td><%= item1.cat_id.catname %></td>
+                            <td><%= item1.SubCat_id.name %></td>
+                            <td><%= item1.Product_name %></td>
+                            <td><%= item1.Product_price %></td>
+                            <td><img src="<%= item1.Images %>" alt="Image"></td> 
+                            <td class="d-flex p-0">
+                              <button class="btn btn-outline-success m-2"><a href="/admin/editProduct/<%= item1._id%>">Edit</a></button>
+                              <button class="btn btn-outline-danger m-2"><a href="/admin/deleteProduct/<%= item1._id%>">Delete</a></button>
+                            </td>
+                        </tr>
+
+                    <% }) %>
+                <% } %>
+              </tbody>
+                </table>
+            </div>
+          </div>
+      </div>
+    </div>
+    </section>
+    
+  <%- include ('./partials/footer.ejs') %>
+  <script src="../views/allcat.js"></script>
+

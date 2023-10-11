@@ -4,16 +4,16 @@ const submodel = require('../models/SubCatModel');
 
 const app = express();
 app.use(express.json());
-const getcategorydata = async (req,res)=>{
-    const getAllCat = await model.find();
-    console.log(getAllCat);
-    res.render('categories',{
-        username:req.cookies.UserName,
-        getAllCat: getAllCat,
-        message: '',
-        editsubcat: ''
-        });
-}
+// const getcategorydata = async (req,res)=>{
+//     const getAllCat = await model.find();
+//     console.log(getAllCat);
+//     res.render('categories',{
+//         username:req.cookies.UserName,
+//         getAllCat: getAllCat,
+//         message: '',
+//         editsubcat: ''
+//         });
+// }
 
 const SaveSubCat = async(req,res)=>{
     let getAllCat = await submodel.find();
@@ -63,8 +63,33 @@ const Allsubcat = async(req,res)=>{
         message2:'',
         editsubcat:'',
         catdata: catdata
-    })
+    }) 
 }
+ const Getsearchdata = async(req, res)=>{
+    try{
+    let search = req.query.selectedValue;
+    console.log(search);
+
+    const categories = await model.find({
+        catname :{ $regex: new RegExp(search, 'i')}
+    });
+    let id = categories.map(category=>category._id)
+    let subdata = await submodel.find({
+        cat_id : {$in: id}
+    }).populate("cat_id");
+    console.log(subdata);
+
+    if(subdata.length  === 0){
+        subdata = await submodel.find({name: {$regex: new RegExp(search, 'i')}}).populate("cat_id");
+    }
+    res.json(subdata);
+}catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+};
+
+
 
 const delsubcat =  async(req,res)=>{
     const id = req.params.id;
@@ -117,4 +142,5 @@ module.exports = {
                 delsubcat,
                 editsubcat, 
                 updatesubcat, 
-                allcatdata}
+                allcatdata,
+                Getsearchdata}

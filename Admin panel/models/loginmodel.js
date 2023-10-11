@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
         unique : true
     },
     password : String,
+    token :  String,
+    role_id:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Role'
+    }
 })
 
 const loginmodel = mongoose.model('admin', userSchema)
