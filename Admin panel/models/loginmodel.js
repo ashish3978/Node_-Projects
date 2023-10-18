@@ -22,7 +22,10 @@ const userSchema = new mongoose.Schema({
     token :  String,
     role_id:{
         type: mongoose.Schema.Types.ObjectId, ref: 'Role'
-    }
+    },
+    google_id: String,
+    Image:String,
+    googleId: String
 })
 
 const loginmodel = mongoose.model('admin', userSchema)

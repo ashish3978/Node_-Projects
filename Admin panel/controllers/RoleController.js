@@ -48,7 +48,7 @@ const AllRole = async(req,res)=>{
     const userRole = req.cookies.UserRole; 
 
     if(userRole && userRole === 'Manager','Employee'){
-        req.flash('danger', 'Managers are not allowed to access this functionality.');
+        req.flash('danger', 'Managers and Employees are not allowed to access this functionality.');
         return res.render('404', { message2: req.flash('danger') }); 
     }
     res.render('Role',{

@@ -177,9 +177,9 @@
                         return res.render('login', { message: req.flash('danger') });
                     }
                     else{
-                        res.cookie("UserRole", rdata.role_id.Rolename);
-                        localStorage.setItem('usertoken', JSON.stringify(rdata.token));
                         res.cookie("fullname", rdata.fullname);
+                        localStorage.setItem('uToken', JSON.stringify(rdata.token));
+                        res.cookie("UserRole", rdata.role_id.Rolename);
                         res.render('index', { message: '', username: rdata.name });
                     }
                 }

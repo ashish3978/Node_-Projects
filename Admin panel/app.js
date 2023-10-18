@@ -5,7 +5,10 @@ const cookie = require('cookie-parser')
 const session = require('express-session');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const DataConnect = require('./models/DBconnect')
 
+DataConnect();
 app.use(cookie());
 app.use(session({ secret: "secret-key",resave:true,saveUninitialized:true }));
 
@@ -28,6 +31,8 @@ app.use(session({
   saveUninitialized: true,
 }));
 
+app.use(passport.initialize()); 
+app.use(passport.session()); 
 app.use(flash());
 
 app.use(routes);

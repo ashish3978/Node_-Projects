@@ -47,7 +47,7 @@ const savecat = async (req,res)=>{
             id: len,
             catname: catname
         }
-        const savedata = new model(result);
+        const savedata = new model(result); 
         await savedata.save();
         req.flash('success',   'Category Saved');
         res.render('categories',{
@@ -105,7 +105,7 @@ const deleteCategory = async (req,res)=>{
     if(sub_cat.length > 0){
         res.send("Category has subcategory so first delete it");
     } else {
-        const data = await models.findByIdAndRemove({_id: id});
+        const data = await model.findByIdAndRemove({_id: id});
         if(data){
             res.redirect('/admin/category')
         }
