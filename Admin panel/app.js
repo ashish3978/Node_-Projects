@@ -5,26 +5,11 @@ const cookie = require('cookie-parser')
 const session = require('express-session');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
-const passport = require('passport');
 const DataConnect = require('./models/DBconnect')
 
+const passport = require('passport');
 DataConnect();
 app.use(cookie());
-app.use(session({ secret: "secret-key",resave:true,saveUninitialized:true }));
-
-
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use(session({
-  secret: 'secret-key',
-  saveUninitialized: false,
-  resave: false,  
-}));
-
-
-app.set('view engine', 'ejs');
-app.use(express.static(__dirname,));
-
 app.use(session({
   secret:'flashblog',
   resave: true,
@@ -34,6 +19,11 @@ app.use(session({
 app.use(passport.initialize()); 
 app.use(passport.session()); 
 app.use(flash());
+
+app.set('view engine', 'ejs');
+app.use(express.static(__dirname,));  
+
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(routes);
 app.get('/index', (req, res) => {

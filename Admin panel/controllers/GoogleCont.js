@@ -7,7 +7,8 @@ const mongoose = require('mongoose')
 
 
 const SaveGoogleData = async (req,res)=>{
-    const {fullname,password,email, role_id} = req.body
+    const {fullname,password,email, role_id, googleId} = req.body
+    console.log(req.body)
     const checkRole = await model.findOne({role_id}).populate('role_id');
     const roledata = await RoleModel.find(); 
     
@@ -17,7 +18,7 @@ const SaveGoogleData = async (req,res)=>{
                     req.flash('danger', 'Admin is already registered');
                     res.render('register', {
                         message_2: req.flash('danger'),
-                        roledata: roledata,
+                        roledata: roledata, 
                     }); 
                 }else if(checkRole.role_id.Rolename == "Manager"){
                     let checkManager = await loginmodel.find({role_id});

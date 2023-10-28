@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const findOrCreate = require('mongoose-findorcreate');
 const data = async ()=>{
     const url = "mongodb://127.0.0.1:27017/registerdatabase"
     await mongoose.connect(url);
@@ -9,7 +10,7 @@ data();
 const userSchema = new mongoose.Schema({
     id : Number,
     fullname : {
-        type : String,
+        type : String, 
         required : true,
         unique : true
     },
@@ -24,10 +25,10 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, ref: 'Role'
     },
     google_id: String,
-    Image:String,
-    googleId: String
+    googleId: String,
+    Image: String,
 })
-
+userSchema.plugin(findOrCreate)
 const loginmodel = mongoose.model('admin', userSchema)
 
 
